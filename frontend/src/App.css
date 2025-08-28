@@ -18,12 +18,13 @@
   background: rgba(43, 43, 43, 0.85);
   backdrop-filter: blur(6px);
   color: #ffffff;
-  padding: 15px;
-  font-size: 1.2rem;
-  font-weight: bold;
+  padding: 10px;   
+  font-size: 1rem; 
+  font-weight: 600; 
   text-align: center;
   border-bottom: 1px solid rgba(255,255,255,0.2);
 }
+
 
 .messages-container {
   flex-grow: 1;
@@ -111,7 +112,6 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* 📱 Mobile responsiveness */
 @media (max-width: 768px) {
   .chat-header {
     font-size: 1rem;
@@ -137,9 +137,9 @@
 }
 
 @media (max-width: 480px) {
-  .chat-header {
-    font-size: 0.9rem;
-    padding: 8px;
+.chat-header {
+    font-size: 0.85rem;  
+    padding: 6px;       
   }
   .messages-container {
     padding: 8px;
