@@ -1,14 +1,15 @@
 .chat-container {
   width: 100vw;
-  height: 100vh;
+  height: 100dvh; /* ✅ Dynamic viewport height (keyboard adjust karega) */
+  min-height: -webkit-fill-available; /* ✅ iOS Safari fix */
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
   background-image: url('https://i.pinimg.com/originals/71/d8/bb/71d8bb73135b2b07af0b575d43a67fe3.gif');
-  background-position: center;   
-  background-size: cover;       
-  background-repeat: no-repeat;   
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
   color: #fff;
   overflow: hidden;
 }
@@ -17,7 +18,7 @@
   background: rgba(43, 43, 43, 0.85);
   backdrop-filter: blur(6px);
   color: #ffffff;
-  padding: 2px
+  padding: 15px;
   font-size: 1.2rem;
   font-weight: bold;
   text-align: center;
@@ -60,12 +61,15 @@
   border-bottom-left-radius: 5px;
 }
 
+/* ✅ Input bar hamesha neeche chipka rahe */
 .input-form {
   display: flex;
   padding: 15px;
   background: rgba(30, 30, 30, 0.8);
   backdrop-filter: blur(6px);
   border-top: 1px solid rgba(255,255,255,0.2);
+  position: sticky;
+  bottom: 0;
 }
 
 .message-input {
@@ -111,24 +115,20 @@
   .chat-header {
     font-size: 1rem;
   }
-
   .messages-container {
-    padding: 4px;
     gap: 8px;
+    padding: 10px;
   }
-
   .message {
     font-size: 0.85rem;
     padding: 10px 12px;
     max-width: 85%;
   }
-
   .message-input {
     font-size: 0.9rem;
     padding: 10px 12px;
     margin-right: 8px;
   }
-
   .send-button {
     padding: 8px 15px;
     font-size: 0.9rem;
@@ -138,24 +138,21 @@
 @media (max-width: 480px) {
   .chat-header {
     font-size: 0.9rem;
+    padding: 8px;
   }
-
   .messages-container {
-    padding: 3px;
+    padding: 8px;
   }
-
   .message {
     font-size: 0.8rem;
     padding: 8px 10px;
     max-width: 90%;
   }
-
   .message-input {
     font-size: 0.85rem;
     padding: 8px 10px;
     margin-right: 6px;
   }
-
   .send-button {
     padding: 6px 12px;
     font-size: 0.85rem;
