@@ -14,7 +14,7 @@
 }
 
 .chat-header {
-  background: rgba(43, 43, 43, 0.85); /* semi-transparent */
+  background: rgba(43, 43, 43, 0.85);
   backdrop-filter: blur(6px);
   color: #ffffff;
   padding: 15px;
@@ -31,7 +31,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  background: rgba(18, 18, 18, 0.6); /* transparent glass effect */
+  background: rgba(18, 18, 18, 0.6);
   backdrop-filter: blur(8px);
   scroll-behavior: smooth;
 }
@@ -104,4 +104,62 @@
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(5px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* 📱 Mobile responsiveness */
+@media (max-width: 768px) {
+  .chat-header {
+    font-size: 1rem;
+    padding: 10px;
+  }
+
+  .messages-container {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .message {
+    font-size: 0.85rem;
+    padding: 10px 12px;
+    max-width: 85%;
+  }
+
+  .message-input {
+    font-size: 0.9rem;
+    padding: 10px 12px;
+    margin-right: 8px;
+  }
+
+  .send-button {
+    padding: 8px 15px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .chat-header {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+
+  .messages-container {
+    padding: 8px;
+  }
+
+  .message {
+    font-size: 0.8rem;
+    padding: 8px 10px;
+    max-width: 90%;
+  }
+
+  .message-input {
+    font-size: 0.85rem;
+    padding: 8px 10px;
+    margin-right: 6px;
+  }
+
+  .send-button {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
 }
