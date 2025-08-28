@@ -27,7 +27,7 @@ function App() {
   };
 
   useEffect(() => {
-    let socketInstance = io("https://ai-chatbox-saarthi.vercel.app", {
+    let socketInstance = io("https://ai-chatbox-saarthi.onrender.com", {
       transports: ['websocket'],
       withCredentials: true,
     });
