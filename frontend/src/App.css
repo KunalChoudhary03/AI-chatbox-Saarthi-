@@ -1,206 +1,90 @@
-/* Global reset + font */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Poppins", "Segoe UI", Arial, sans-serif;
+import { useState, useEffect, useRef } from 'react';
+import { io } from "socket.io-client";
+import './App.css';
+
+function App() {
+  const [socket, setSocket] = useState(null);
+  const [message, setMessage] = useState('');
+  const [conversations, setConversations] = useState([
+    {
+      id: 1,
+      text: 'Hello! I am Saarthi how can i help you?',
+      sender: 'bot'
+    }
+  ]);
+
+  const messagesEndRef = useRef(null);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (message.trim()) {
+      setConversations(prev => [...prev, { text: message, sender: 'user' }]);
+      if (socket) {
+        socket.emit("ai-message", message);
+      }
+      setMessage('');
+    }
+  };
+
+  useEffect(() => {
+    let socketInstance = io("https://ai-chatbox-saarthi.onrender.com", {
+      transports: ['websocket'],
+      withCredentials: true,
+    });
+    setSocket(socketInstance);
+
+    socketInstance.on("ai-message-response", (response) => {
+      const botMessage = {
+        text: response,
+        sender: "bot",
+      };
+      setConversations((prev) => [...prev, botMessage]);
+    });
+
+    return () => {
+      socketInstance.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [conversations]);
+
+  return (
+    <div className="chat-container">
+      <div className="chat-header">
+        <h2>Saarthi.AI</h2>
+      </div>
+      
+      <div className="messages-container">
+        {conversations.map((msg, index) => (
+          <div 
+            key={index} 
+            className={`message ${msg.sender === 'user' ? 'user-message' : 'bot-message'}`}
+          >
+            <span className="message-sender">
+              {msg.sender === 'user' ? 'You' : 'Saarthi'}: 
+            </span> {msg.text}
+          </div>
+        ))}
+        <div ref={messagesEndRef}></div>
+      </div>
+
+      <form onSubmit={handleSubmit} className="input-form">
+        <input
+          type="text"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="Type a message..."
+          className="message-input"
+        />
+        <button type="submit" className="send-button">
+          Send
+        </button>
+      </form>
+    </div>
+  );
 }
 
-.chat-container {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background-image: url('https://i.pinimg.com/originals/71/d8/bb/71d8bb73135b2b07af0b575d43a67fe3.gif');
-  background-position: center;   
-  background-size: cover;       
-  background-repeat: no-repeat;   
-  color: #fff;
-  overflow: hidden;
-}
+export default App;
 
-/* Header */
-.chat-header {
-  background: rgba(43, 43, 43, 0.85);
-  backdrop-filter: blur(6px);
-  color: #ffffff;
-  padding: 18px;
-  font-size: 1.4rem;
-  font-weight: 600;
-  text-align: center;
-  letter-spacing: 0.5px;
-  border-bottom: 1px solid rgba(255,255,255,0.2);
-}
-
-/* Messages container */
-.messages-container {
-  flex-grow: 1;
-  padding: 22px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  background: rgba(18, 18, 18, 0.6);
-  backdrop-filter: blur(10px);
-  scroll-behavior: smooth;
-}
-
-/* Messages */
-.message {
-  padding: 14px 18px;
-  border-radius: 14px;
-  max-width: 78%;
-  line-height: 1.6;
-  word-wrap: break-word;
-  font-size: 1rem;
-  animation: fadeIn 0.2s ease-in;
-  font-weight: 400;
-}
-
-.user-message {
-  background-color: #0078ff;
-  color: white;
-  margin-left: auto;
-  border-bottom-right-radius: 5px;
-}
-
-.bot-message {
-  background-color: rgba(45, 45, 45, 0.85);
-  color: #f1f1f1;
-  margin-right: auto;
-  border-bottom-left-radius: 5px;
-}
-
-/* Input box */
-.input-form {
-  display: flex;
-  padding: 16px;
-  background: rgba(30, 30, 30, 0.85);
-  backdrop-filter: blur(8px);
-  border-top: 1px solid rgba(255,255,255,0.2);
-}
-
-.message-input {
-  flex-grow: 1;
-  padding: 14px 16px;
-  border: 1px solid #555;
-  border-radius: 25px;
-  margin-right: 12px;
-  font-size: 1rem;
-  outline: none;
-  background: rgba(42, 42, 42, 0.9);
-  color: #fff;
-  transition: 0.2s;
-}
-
-.message-input:focus {
-  border-color: #0078ff;
-  box-shadow: 0 0 6px rgba(0,120,255,0.5);
-}
-
-.send-button {
-  padding: 10px 22px;
-  background-color: #0078ff;
-  color: white;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: 0.25s;
-  font-weight: 500;
-}
-
-.send-button:hover {
-  background-color: #005ec4;
-}
-
-/* Animation */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* ✅ Mobile responsiveness */
-@media (max-width: 1024px) {
-  .chat-header {
-    font-size: 1.2rem;
-    padding: 14px;
-  }
-
-  .messages-container {
-    padding: 16px;
-    gap: 12px;
-  }
-
-  .message {
-    font-size: 0.95rem;
-    padding: 12px 15px;
-    max-width: 85%;
-  }
-
-  .message-input {
-    font-size: 0.95rem;
-    padding: 12px 14px;
-  }
-
-  .send-button {
-    padding: 8px 18px;
-    font-size: 0.95rem;
-  }
-}
-
-@media (max-width: 600px) {
-  .chat-header {
-    font-size: 1rem;
-    padding: 12px;
-  }
-
-  .messages-container {
-    padding: 12px;
-    gap: 10px;
-  }
-
-  .message {
-    font-size: 0.9rem;
-    padding: 10px 12px;
-    max-width: 90%;
-  }
-
-  .message-input {
-    font-size: 0.9rem;
-    padding: 10px 12px;
-    margin-right: 8px;
-  }
-
-  .send-button {
-    padding: 7px 14px;
-    font-size: 0.9rem;
-  }
-}
-
-@media (max-width: 400px) {
-  .chat-header {
-    font-size: 0.9rem;
-    padding: 10px;
-  }
-
-  .messages-container {
-    padding: 10px;
-  }
-
-  .message {
-    font-size: 0.85rem;
-    padding: 8px 10px;
-    max-width: 92%;
-  }
-
-  .message-input {
-    font-size: 0.85rem;
-    padding: 8px 10px;
-  }
-
-  .send-button {
-    padding: 6px 12px;
-    font-size: 0.85rem;
-  }
-}
