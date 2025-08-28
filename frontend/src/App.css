@@ -1,7 +1,7 @@
 .chat-container {
   width: 100vw;
-  height: 100dvh; /* ✅ Dynamic viewport height (keyboard adjust karega) */
-  min-height: -webkit-fill-available; /* ✅ iOS Safari fix */
+  height: 100dvh; 
+  min-height: -webkit-fill-available; 
   margin: 0;
   padding: 0;
   display: flex;
