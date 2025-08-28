@@ -8,7 +8,7 @@ function App() {
   const [conversations, setConversations] = useState([
     {
       id: 1,
-      text: 'Hello! I am Saarthi how can i help you?',
+      text: 'Hello! I am Saarthi, how can I help you?',
       sender: 'bot'
     }
   ]);
@@ -26,8 +26,13 @@ function App() {
     }
   };
 
+  const handleCopy = (text) => {
+    navigator.clipboard.writeText(text);
+    alert("Copied to clipboard ✅");
+  };
+
   useEffect(() => {
-    let socketInstance = io("https://ai-chatbox-saarthi.onrender.com", {
+    let socketInstance = io("https://ai-chatbox-saarthi.vercel.app", {
       transports: ['websocket'],
       withCredentials: true,
     });
@@ -64,7 +69,23 @@ function App() {
           >
             <span className="message-sender">
               {msg.sender === 'user' ? 'You' : 'Saarthi'}: 
-            </span> {msg.text}
+            </span>
+
+            <div className="message-text">
+              {msg.text.split("\n").map((line, i) => (
+                <p key={i}>{line}</p>
+              ))}
+            </div>
+
+            {/* Copy button only for bot messages */}
+            {msg.sender === 'bot' && (
+              <button 
+                className="copy-btn" 
+                onClick={() => handleCopy(msg.text)}
+              >
+                📋 Copy
+              </button>
+            )}
           </div>
         ))}
         <div ref={messagesEndRef}></div>
