@@ -1,5 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { io } from "socket.io-client";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeHighlight from "rehype-highlight";
 import './App.css';
 
 function App() {
@@ -8,7 +11,7 @@ function App() {
   const [conversations, setConversations] = useState([
     {
       id: 1,
-      text: 'Hello! I am Saarthi how can i help you?',
+      text: 'Hello! I am Saarthi, how can I help you?',
       sender: 'bot'
     }
   ]);
@@ -27,7 +30,10 @@ function App() {
   };
 
   useEffect(() => {
-    let socketInstance = io("http://localhost:3000");
+    let socketInstance = io("https://ai-chatbox-saarthi.onrender.com", {
+      transports: ['websocket'],
+      withCredentials: true,
+    });
     setSocket(socketInstance);
 
     socketInstance.on("ai-message-response", (response) => {
@@ -60,8 +66,16 @@ function App() {
             className={`message ${msg.sender === 'user' ? 'user-message' : 'bot-message'}`}
           >
             <span className="message-sender">
-              {msg.sender === 'user' ? 'You' : 'Saarthi'}: 
-            </span> {msg.text}
+              {msg.sender === 'user' ? 'You' : 'Saarthi'}:
+            </span>
+            
+            <div className="message-text">
+              <ReactMarkdown 
+                children={msg.text}
+                remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeHighlight]}
+              />
+            </div>
           </div>
         ))}
         <div ref={messagesEndRef}></div>
