@@ -7,11 +7,8 @@ const generateResponse = require('./src/service/ai.service');
 const httpServer = createServer(app);
 
 const io = new Server(httpServer, { 
-  cors: {
-    origin: [
-      "http://localhost:5173",
-      "https://ai-chatbox-saarthi.vercel.app"
-    ],
+   cors: {
+    origin: "https://ai-chatbox-saarthi.vercel.app/", 
     methods: ["GET", "POST"],
     credentials: true
   }
