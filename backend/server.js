@@ -8,7 +8,10 @@ const httpServer = createServer(app);
 
 const io = new Server(httpServer, { 
   cors: {
-    origin: "https://ai-chatbox-saarthi.vercel.app", 
+    origin: [
+      "https://ai-chatbox-saarthi.vercel.app",  
+      "http://localhost:5173"                   
+    ],
     methods: ["GET", "POST"],
     credentials: true
   }
