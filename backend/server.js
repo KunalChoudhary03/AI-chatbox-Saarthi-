@@ -7,13 +7,13 @@ const generateResponse = require('./src/service/ai.service');
 const httpServer = createServer(app);
 
 const io = new Server(httpServer, { 
-  cors: {
-    origin: [
-      "https://ai-chatbox-saarthi.vercel.app",  
-      "http://localhost:5173"                   
-    ],
-    credentials: true
-  }
+   cors: {
+    origin: [
+      "https://ai-chatbox-saarthi.vercel.app",  
+      "http://localhost:5173"                   
+    ],
+    credentials: true
+  }
 });
 
 const chatHistory = [];
