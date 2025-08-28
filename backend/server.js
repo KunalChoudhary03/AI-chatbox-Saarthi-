@@ -12,7 +12,6 @@ const io = new Server(httpServer, {
       "https://ai-chatbox-saarthi.vercel.app",  
       "http://localhost:5173"                   
     ],
-    methods: ["GET", "POST"],
     credentials: true
   }
 });
