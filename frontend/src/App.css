@@ -24,7 +24,7 @@
 }
 
 .chat-header h2 {
-  font-size: 1.3rem;
+  font-size: 2rem;
   font-weight: 600;
   color: #00aaff;
   margin: 0;
@@ -45,7 +45,7 @@
   border-radius: 14px;
   max-width: 75%;
   line-height: 1.6;
-  font-size: 1.05rem;
+  font-size: 3rem;
   word-wrap: break-word;
   animation: fadeIn 0.25s ease-in-out;
   position: relative;
@@ -68,7 +68,7 @@
 }
 
 .message-sender {
-  font-size: 0.8rem;
+  font-size:1.5rem;
   font-weight: 500;
   color: #bbb;
   display: block;
@@ -93,7 +93,7 @@
   border-radius: 25px;
   background: rgba(50, 50, 50, 0.9);
   color: #fff;
-  font-size: 1rem;
+  font-size: 1.5rem;
   outline: none;
   transition: box-shadow 0.2s;
 }
@@ -109,7 +109,7 @@
   border: none;
   border-radius: 25px;
   color: white;
-  font-size: 1rem;
+  font-size: 1.5rem;
   font-weight: 500;
   cursor: pointer;
   transition: background 0.25s, transform 0.15s;
@@ -131,19 +131,19 @@
 
 @media (max-width: 768px) {
   .chat-header h2 {
-    font-size: 1.2rem;
+    font-size: 1.7rem;
   }
   .messages-container {
     padding: 12px;
     gap: 12px;
   }
   .message {
-    font-size: 1.1rem;
+    font-size: 1.8rem;
     padding: 12px 14px;
     max-width: 85%;
   }
   .message-input {
-    font-size: 1.1rem;
+    font-size: 1.8rem;
     padding: 12px 14px;
   }
   .send-button {
@@ -157,12 +157,12 @@
     font-size: 1.1rem;
   }
   .message {
-    font-size: 1rem;
+    font-size: 1.8rem;
     padding: 10px 12px;
     max-width: 90%;
   }
   .message-input {
-    font-size: 1rem;
+    font-size: 1.8rem;
     padding: 10px 12px;
   }
   .send-button {
