@@ -7,38 +7,59 @@ function App() {
   const [message, setMessage] = useState('');
   const [conversations, setConversations] = useState([
     {
-      id: 1,
-      text: 'Hello! I am Saarthi how can i help you?',
+      id: Date.now(),
+      text: 'Hello! I am Saarthi, how can I help you?',
       sender: 'bot'
     }
   ]);
 
   const messagesEndRef = useRef(null);
 
+  // -----------------------------~`
+  // Handle message submit
+  // -----------------------------
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (message.trim()) {
-      setConversations(prev => [...prev, { text: message, sender: 'user' }]);
-      if (socket) {
-        socket.emit("ai-message", message);
-      }
-      setMessage('');
+
+    if (!message.trim()) return;
+
+    const userMessage = {
+      id: Date.now(),
+      text: message,
+      sender: "user"
+    };
+
+    setConversations(prev => [...prev, userMessage]);
+
+    if (socket) {
+      socket.emit("ai-message", message);
     }
+
+    setMessage('');
   };
 
+  // -----------------------------
+  // Initialize socket connection
+  // -----------------------------
   useEffect(() => {
-    let socketInstance = io("https://ai-chatbox-saarthi.onrender.com", {
-      transports: ['websocket'],
-      withCredentials: true,
+    const socketInstance = io("https://ai-chatbox-saarthi.onrender.com", {
+      transports: ["websocket"],
+      withCredentials: true
     });
+
     setSocket(socketInstance);
+
+    socketInstance.on("connect", () => {
+      console.log("Connected to server");
+    });
 
     socketInstance.on("ai-message-response", (response) => {
       const botMessage = {
-        text: response,
-        sender: "bot",
+        id: Date.now(),
+        text: typeof response === "string" ? response : response?.text,
+        sender: "bot"
       };
-      setConversations((prev) => [...prev, botMessage]);
+      setConversations(prev => [...prev, botMessage]);
     });
 
     return () => {
@@ -46,6 +67,9 @@ function App() {
     };
   }, []);
 
+  // -----------------------------
+  // Auto-scroll to latest message
+  // -----------------------------
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [conversations]);
@@ -57,13 +81,13 @@ function App() {
       </div>
       
       <div className="messages-container">
-        {conversations.map((msg, index) => (
+        {conversations.map((msg) => (
           <div 
-            key={index} 
+            key={msg.id}
             className={`message ${msg.sender === 'user' ? 'user-message' : 'bot-message'}`}
           >
             <span className="message-sender">
-              {msg.sender === 'user' ? 'You' : 'Saarthi'}: 
+              {msg.sender === 'user' ? 'You' : 'Saarthi'}:
             </span> {msg.text}
           </div>
         ))}
@@ -78,7 +102,11 @@ function App() {
           placeholder="Type a message..."
           className="message-input"
         />
-        <button type="submit" className="send-button">
+        <button 
+          type="submit" 
+          className="send-button"
+          disabled={!message.trim()}
+        >
           Send
         </button>
       </form>
