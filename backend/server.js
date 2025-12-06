@@ -71,6 +71,16 @@ io.on("connection", (socket) => {
   });
 });
 
-httpServer.listen(3000, () => {
-  console.log(" Server running on port 3000");
+const PORT = process.env.PORT || 3000;
+
+// Log configured CORS origins for easier debugging in production
+try {
+  const corsOrigins = (io && io.opts && io.opts.cors && io.opts.cors.origin) || [];
+  console.log('Configured socket CORS origins:', corsOrigins);
+} catch (e) {
+  // ignore
+}
+
+httpServer.listen(PORT, () => {
+  console.log(` Server running on port ${PORT}`);
 });
