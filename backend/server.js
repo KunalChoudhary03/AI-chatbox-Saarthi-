@@ -31,7 +31,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("ai-message", async (data) => {
-    console.log(" User message:", data);
+    console.log("[socket] User message from", socket.id, ":", data);
 
     try {
       // Push user message
@@ -40,8 +40,9 @@ io.on("connection", (socket) => {
         parts: [{ text: data }]
       });
 
-      // Generate AI reply
-      const botReply = await generateResponse(userChats[socket.id]);
+      // Generate AI reply - pass only the latest user text (matches Postman test input)
+      const latestUserEntry = data; // `data` is the raw message string from the client
+      const botReply = await generateResponse(latestUserEntry);
 
       // Push bot message into user history
       userChats[socket.id].push({
@@ -49,10 +50,18 @@ io.on("connection", (socket) => {
         parts: [{ text: botReply }]
       });
 
+      // Log the bot reply before sending
+      try {
+        const replyForLog = (typeof botReply === 'string') ? botReply : JSON.stringify(botReply);
+        console.log(`[socket] Sending bot reply to ${socket.id}:`, replyForLog);
+      } catch (logErr) {
+        console.error('[socket] Failed to stringify botReply for log', logErr);
+      }
+
       // Send bot message back to user
       socket.emit("ai-message-response", botReply);
     } catch (err) {
-      console.error("AI Error:", err);
+      console.error("AI Error:", err && err.stack ? err.stack : err);
 
       socket.emit(
         "ai-message-response",
