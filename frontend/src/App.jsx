@@ -45,8 +45,12 @@ function App() {
     // Use Vite env var `VITE_SOCKET_URL` or fall back to localhost for local dev
     const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || "http://localhost:3000";
     console.log("Connecting socket to:", SOCKET_URL);
+    // If running in production and websockets are failing on the host,
+    // force long-polling which avoids websocket upgrade failures.
+    const transports = import.meta.env.PROD ? ['polling'] : ['websocket', 'polling'];
+
     const socketInstance = io(SOCKET_URL, {
-      transports: ["websocket", "polling"],
+      transports,
       withCredentials: true
     });
 
