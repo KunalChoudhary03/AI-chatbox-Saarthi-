@@ -42,25 +42,33 @@ function App() {
   // Initialize socket connection
   // -----------------------------
   useEffect(() => {
-    const socketInstance = io("https://ai-chatbox-saarthi.onrender.com", {
-      transports: ["websocket"],
+    // Use Vite env var `VITE_SOCKET_URL` or fall back to localhost for local dev
+    const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || "http://localhost:3000";
+    console.log("Connecting socket to:", SOCKET_URL);
+    const socketInstance = io(SOCKET_URL, {
+      transports: ["websocket", "polling"],
       withCredentials: true
     });
 
     setSocket(socketInstance);
 
     socketInstance.on("connect", () => {
-      console.log("Connected to server");
+      console.log("Connected to server", socketInstance.id);
+    });
+
+    socketInstance.on("connect_error", (err) => {
+      console.error("Socket connect error:", err);
     });
 
     socketInstance.on("ai-message-response", (response) => {
       const botMessage = {
         id: Date.now(),
-        text: typeof response === "string" ? response : response?.text,
+        text: response,
         sender: "bot"
       };
       setConversations(prev => [...prev, botMessage]);
     });
+
 
     return () => {
       socketInstance.disconnect();
